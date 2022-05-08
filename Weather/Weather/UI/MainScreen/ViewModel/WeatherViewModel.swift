@@ -15,7 +15,7 @@ protocol WeatherViewModelProtocol {
 }
 
 protocol WeatherCurrentViewViewModelProtocol {
-    func setupCurrentWeather()
+    var currentData: WeatherAtMoment { get }
 }
 
 protocol WeatherTableViewModelProtocol {
@@ -43,8 +43,8 @@ extension WeatherViewModel: WeatherViewModelProtocol {
     
     func requestLocation(completion: @escaping (Error?) -> ()) {
         switch locationManager.authorizationStatus {
-            
         case .notDetermined, .restricted, .denied:
+            //TODO: - UserDefaults
             locationManager.requestWhenInUseAuthorization()
         case .authorizedAlways, .authorizedWhenInUse:
             self.currentLocation = locationManager.location
@@ -77,10 +77,8 @@ extension WeatherViewModel: WeatherViewModelProtocol {
 
 extension WeatherViewModel: WeatherTableViewModelProtocol {
     var tableDataSource: [WeatherDayResponse] {
-        get {
-            guard let data = dataSource else { return [] }
-            return data.dailyWeather.data
-        }
+        guard let data = dataSource else { return [] }
+        return data.dailyWeather.data
     }
 }
 
@@ -88,5 +86,12 @@ extension WeatherViewModel: WeatherCollectionViewModelProtocol {
     var collectionDataSource: [WeatherHourResponse] {
         guard let data = dataSource else { return [] }
         return data.hourlyWeather.data
+    }
+}
+
+extension WeatherViewModel: WeatherCurrentViewViewModelProtocol {
+    var currentData: WeatherAtMoment {
+        guard let data = dataSource else { return }
+        return WeatherAtMoment(weatherObject: data)
     }
 }

@@ -34,10 +34,8 @@ class MainViewController: UIViewController, AlertPresentable {
     private func updateView() {
         self.weatherTableView.reloadData()
         self.weatherColletionView.reloadData()
-        guard let weatherResponse = viewModel?.dataSource else { return }
-        let object = WeatherAtMoment(weatherObject: weatherResponse)
-        weatherAtMomentView.setupView(model: object)
-        mainImageView.image = object.state.backgroundImage
+        self.weatherAtMomentView.setupView(model: viewModel?.currentData)
+        self.mainImageView.image = viewModel?.currentData.state.backgroundImage
     }
     
     private func registerCells() {
@@ -76,9 +74,7 @@ extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherByDayCell") as? WeatherByDayCell,
               let weatherObject = viewModel?.tableDataSource[indexPath.row]
-        else {
-            return UITableViewCell()
-        }
+        else { return UITableViewCell() }
         
         let model = WeatherByDay(weatherObject: weatherObject)
         cell.configure(model: model)
@@ -100,6 +96,7 @@ extension MainViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherByHourCell", for: indexPath) as? WeatherByHourCell,
               let weatherObject = viewModel?.collectionDataSource[indexPath.row]
         else { return UICollectionViewCell()}
+        
         let model = WeatherByHour(weatherObject: weatherObject)
         cell.configure(model: model)
         return cell
