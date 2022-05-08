@@ -13,11 +13,11 @@ class WeatherByDayCell: UITableViewCell {
     @IBOutlet weak var minTempLabel: UILabel!
     @IBOutlet weak var maxTempLabel: UILabel!
     
-    func configure(model: WeatherDayResponse?) {
+    func configure(model: WeatherByDay?) {
         guard let model = model else { return }
-        self.dayLabel.text = String(model.timestamp)
-        self.minTempLabel.text = String(model.minTemp)
-        self.maxTempLabel.text = String(model.maxTemp)
+        self.dayLabel.text = model.timestamp
+        self.minTempLabel.text = model.minTemp + String.degree
+        self.maxTempLabel.text = model.maxTemp + String.degree
     }
     
 }

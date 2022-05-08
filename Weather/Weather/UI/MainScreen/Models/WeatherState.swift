@@ -8,13 +8,25 @@
 import Foundation
 import UIKit
 
-enum WeatherState: String {
+func checkForState(with state: String) -> WeatherState {
+    var currentState = WeatherState.another
+    WeatherState.allCases.forEach { element in
+        if state.lowercased().contains(element.rawValue.lowercased()) {
+            currentState = element
+            return
+        }
+    }
+    return currentState
+}
+enum WeatherState: String, CaseIterable {
     
-    case rain = "rain"
-    case snow = "snow"
-    case sunny = "clear"
-    case cloud = "clouds"
+    case rain = "Rain"
+    case snow = "Snow"
+    case sunny = "Clear"
+    case cloud = "Cloud"
+    case overcast = "Overcast"
     case another
+    
     
     var image: UIImage? {
         switch self {
@@ -26,6 +38,8 @@ enum WeatherState: String {
             return UIImage(systemName: "cloud.sun.fill")
         case .cloud:
             return UIImage(systemName: "cloud.fill")
+        case .overcast:
+            return UIImage(systemName: "cloud.sun.fill")
         case .another:
             return UIImage(systemName: "cloud")
         }
@@ -40,6 +54,8 @@ enum WeatherState: String {
         case .sunny:
             return UIImage(named: "sun")
         case .cloud:
+            return UIImage(named: "cloud")
+        case .overcast:
             return UIImage(named: "cloud")
         case .another:
             return UIImage(named: "cloud")

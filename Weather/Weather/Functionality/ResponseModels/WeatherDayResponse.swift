@@ -16,7 +16,7 @@ struct WeatherDayResponse: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case timestamp = "time"
-        case state = "icon"
+        case state = "summary"
         case maxTemp = "temperatureMax"
         case minTemp = "temperatureMin"
     }

@@ -13,10 +13,10 @@ class WeatherByHourCell: UICollectionViewCell {
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var tempLabel: UILabel!
     
-    func configure(model: WeatherHourResponse?) {
+    func configure(model: WeatherByHour?) {
         guard let model = model else { return }
-        self.timeLabel.text = String(model.timestamp)
-        self.weatherIcon.image = WeatherState.init(rawValue: model.state)?.image
-        self.tempLabel.text = String(model.temp)
+        self.weatherIcon.image = WeatherState.init(rawValue: model.state.rawValue)?.image
+        self.timeLabel.text = model.timestamp
+        self.tempLabel.text = model.temperature + String.degree
     }
 }

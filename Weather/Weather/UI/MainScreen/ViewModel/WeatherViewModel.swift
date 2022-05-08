@@ -10,46 +10,38 @@ import UIKit
 import CoreLocation
 
 protocol WeatherViewModelProtocol {
-    func registerCells()
-    func requestLocation()
-    func requestWeather()
-    func reloadData()
+    func requestLocation(completion: @escaping (Error?) -> ())
+    func requestWeather(completion: @escaping (Error?) -> ())
+}
+
+protocol WeatherCurrentViewViewModelProtocol {
+    func setupCurrentWeather()
 }
 
 protocol WeatherTableViewModelProtocol {
     var tableDataSource: [WeatherDayResponse] { get }
-    func reloadTable()
 }
 
 protocol WeatherCollectionViewModelProtocol {
     var collectionDataSource: [WeatherHourResponse] { get }
-    func reloadCollection()
 }
 
-final class WeatherViewModel: AlertPresentable {
+
+final class WeatherViewModel {
     
     private var locationManager = CLLocationManager()
     private var currentLocation: CLLocation?
     private var networkService = WeatherNetworkService()
 
     var dataSource: WeatherResponse?
-    var tableView: UITableView
-    var collectionView: UICollectionView
     
-    init(tableView: UITableView, collectionView: UICollectionView) {
-        self.tableView = tableView
-        self.collectionView = collectionView
-    }
+    init() {}
+
 }
 
 extension WeatherViewModel: WeatherViewModelProtocol {
     
-    func registerCells() {
-        self.tableView.register(UINib(nibName: "WeatherByDayCell", bundle: nil), forCellReuseIdentifier: "WeatherByDayCell")
-        self.collectionView.register(UINib(nibName: "WeatherByHourCell", bundle: nil), forCellWithReuseIdentifier: "WeatherByHourCell")
-    }
-    
-    func requestLocation() {
+    func requestLocation(completion: @escaping (Error?) -> ()) {
         switch locationManager.authorizationStatus {
             
         case .notDetermined, .restricted, .denied:
@@ -57,15 +49,14 @@ extension WeatherViewModel: WeatherViewModelProtocol {
         case .authorizedAlways, .authorizedWhenInUse:
             self.currentLocation = locationManager.location
         @unknown default:
-            print("error")
-//            self.showSystemAlert(controller: self, title: "Error", message: "Something went wrong", completion: nil)
+            completion(LocationError.authError)
         }
     }
     
     
-    func requestWeather() {
+    func requestWeather(completion: @escaping (Error?) -> ()) {
         guard let location = currentLocation else {
-            print("Get Location Error")
+            completion(LocationError.authError)
             return
         }
         
@@ -76,18 +67,11 @@ extension WeatherViewModel: WeatherViewModelProtocol {
                 switch result {
                 case .success(let data):
                     self.dataSource = data
-                    self.reloadData()
+                    completion(nil)
                 case .failure(let error):
-                    print("error")
-//                    self.showSystemAlert(controller: self, title: "Error", message: "Something went wrong", completion: nil)
+                    completion(error)
                 }
             }
-        
-    }
-
-    func reloadData() {
-        self.reloadTable()
-        self.reloadCollection()
     }
 }
 
@@ -98,19 +82,11 @@ extension WeatherViewModel: WeatherTableViewModelProtocol {
             return data.dailyWeather.data
         }
     }
-    
-    func reloadTable() {
-        self.tableView.reloadData()
-    }
 }
 
 extension WeatherViewModel: WeatherCollectionViewModelProtocol {
     var collectionDataSource: [WeatherHourResponse] {
         guard let data = dataSource else { return [] }
         return data.hourlyWeather.data
-    }
-    
-    func reloadCollection() {
-        self.collectionView.reloadData()
     }
 }

@@ -9,10 +9,6 @@ import Foundation
 
 class WeatherNetworkService: NetworkService {
     
-//    override func getCurrentWeather(_ router: ApiRouter, completion: @escaping NetworkService.Completion) {
-//        super.getCurrentWeather(router, completion: completion)
-//    }
-    
     func getWeather(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherResponse, NetworkError>) -> ()) {
         self.getCurrentWeather(.getWeatherByLocation(latitude, longitude)) { result in
             switch result {
