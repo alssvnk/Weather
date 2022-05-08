@@ -34,8 +34,9 @@ class MainViewController: UIViewController, AlertPresentable {
     private func updateView() {
         self.weatherTableView.reloadData()
         self.weatherColletionView.reloadData()
-        self.weatherAtMomentView.setupView(model: viewModel?.currentData)
-        self.mainImageView.image = viewModel?.currentData.state.backgroundImage
+        guard let data = viewModel?.currentData else { return }
+        self.weatherAtMomentView.setupView(model: data)
+        self.mainImageView.image = data.state.backgroundImage
     }
     
     private func registerCells() {

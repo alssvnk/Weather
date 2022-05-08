@@ -15,7 +15,7 @@ protocol WeatherViewModelProtocol {
 }
 
 protocol WeatherCurrentViewViewModelProtocol {
-    var currentData: WeatherAtMoment { get }
+    var currentData: WeatherAtMoment? { get }
 }
 
 protocol WeatherTableViewModelProtocol {
@@ -90,8 +90,8 @@ extension WeatherViewModel: WeatherCollectionViewModelProtocol {
 }
 
 extension WeatherViewModel: WeatherCurrentViewViewModelProtocol {
-    var currentData: WeatherAtMoment {
-        guard let data = dataSource else { return }
+    var currentData: WeatherAtMoment? {
+        guard let data = dataSource else { return nil }
         return WeatherAtMoment(weatherObject: data)
     }
 }
