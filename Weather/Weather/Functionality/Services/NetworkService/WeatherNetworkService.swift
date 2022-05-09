@@ -9,7 +9,7 @@ import Foundation
 
 class WeatherNetworkService: NetworkService {
     
-    func getWeather(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherResponse, NetworkError>) -> ()) {
+    func getWeather(latitude: Double, longitude: Double, completion: @escaping (Result<WeatherResponse, Error>) -> ()) {
         self.getCurrentWeather(.getWeatherByLocation(latitude, longitude)) { result in
             switch result {
             case .success(let data):

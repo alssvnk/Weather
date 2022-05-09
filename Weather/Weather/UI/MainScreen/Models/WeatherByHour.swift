@@ -1,11 +1,3 @@
-//
-//  WeatherByHour.swift
-//  Weather
-//
-//  Created by Alisiya on 7.05.22.
-//
-
-import Foundation
 
 struct WeatherByHour {
     let timestamp: String
@@ -13,8 +5,7 @@ struct WeatherByHour {
     let temperature: String
     
     init(weatherObject: WeatherHourResponse) {
-        
-        self.state = checkForState(with: weatherObject.state)
+        self.state = Utilities.checkForState(with: weatherObject.state)
         
         self.timestamp = String(
             weatherObject

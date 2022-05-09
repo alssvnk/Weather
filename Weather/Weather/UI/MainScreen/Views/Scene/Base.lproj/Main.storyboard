@@ -16,9 +16,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Clouds" translatesAutoresizingMaskIntoConstraints="NO" id="bQb-ph-qYA" userLabel="WeatherImageView">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud" translatesAutoresizingMaskIntoConstraints="NO" id="bQb-ph-qYA" userLabel="WeatherImageView">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U1s-IK-Gi6">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J2g-0g-iWr" customClass="CurrentWeatherView" customModule="Weather" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="298.5"/>
                                 <subviews>
@@ -78,18 +82,18 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="tg8-BF-ZHQ"/>
                                         </constraints>
-                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FAu-Cm-IfG">
-                                            <size key="itemSize" width="128" height="128"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="30" minimumInteritemSpacing="10" id="FAu-Cm-IfG">
+                                            <size key="itemSize" width="128" height="100"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <inset key="sectionInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="B2g-Za-GX0">
-                                                <rect key="frame" x="0.0" y="-14" width="128" height="128"/>
+                                                <rect key="frame" x="20" y="0.0" width="128" height="100"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="100"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </view>
                                             </collectionViewCell>
@@ -114,8 +118,11 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="U1s-IK-Gi6" secondAttribute="bottom" id="3b0-RF-6yX"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="U1s-IK-Gi6" secondAttribute="trailing" id="5kr-cf-Kif"/>
                             <constraint firstAttribute="bottom" secondItem="bQb-ph-qYA" secondAttribute="bottom" id="5tn-wc-cox"/>
                             <constraint firstItem="bQb-ph-qYA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="8b2-me-DkS"/>
+                            <constraint firstItem="U1s-IK-Gi6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AUW-d8-24X"/>
                             <constraint firstItem="J2g-0g-iWr" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="1/3" id="Ds2-nf-LDr"/>
                             <constraint firstItem="bQb-ph-qYA" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="KGH-Gx-veK"/>
                             <constraint firstItem="CKZ-DC-y3i" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="KkL-2B-hNN"/>
@@ -124,11 +131,13 @@
                             <constraint firstItem="J2g-0g-iWr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="WQ7-0t-Jb7"/>
                             <constraint firstItem="J2g-0g-iWr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="X2j-Us-2iV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="CKZ-DC-y3i" secondAttribute="bottom" id="giL-Ru-gL2"/>
+                            <constraint firstItem="U1s-IK-Gi6" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="jdg-Dw-eSd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="J2g-0g-iWr" secondAttribute="trailing" id="u2D-Gg-OSm"/>
                             <constraint firstItem="CKZ-DC-y3i" firstAttribute="top" secondItem="J2g-0g-iWr" secondAttribute="bottom" id="za9-bD-blb"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="blurView" destination="U1s-IK-Gi6" id="CSj-yK-R7L"/>
                         <outlet property="mainImageView" destination="bQb-ph-qYA" id="1rS-sY-go0"/>
                         <outlet property="weatherAtMomentView" destination="J2g-0g-iWr" id="6nL-Un-zas"/>
                         <outlet property="weatherColletionView" destination="Ejv-k9-DEH" id="5sH-Y7-tGu"/>
@@ -141,7 +150,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Clouds" width="600" height="750"/>
+        <image name="cloud" width="600" height="750"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

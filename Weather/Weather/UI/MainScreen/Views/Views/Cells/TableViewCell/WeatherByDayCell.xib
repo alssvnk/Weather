@@ -39,13 +39,24 @@
                             </label>
                         </subviews>
                     </stackView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tTh-XE-thF">
+                        <rect key="frame" x="110" y="12" width="20.5" height="20.5"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="tTh-XE-thF" secondAttribute="height" id="R62-ob-iig"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
+                    <constraint firstItem="tTh-XE-thF" firstAttribute="height" secondItem="6Gn-ql-mk0" secondAttribute="height" id="9te-iC-cYr"/>
+                    <constraint firstItem="tTh-XE-thF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Gn-ql-mk0" secondAttribute="trailing" constant="30" id="HE8-sw-8gv"/>
                     <constraint firstItem="6Gn-ql-mk0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="HK0-yw-PIi"/>
+                    <constraint firstItem="tTh-XE-thF" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Kjr-gF-ObH"/>
                     <constraint firstAttribute="trailing" secondItem="s3f-ZC-dys" secondAttribute="trailing" constant="15" id="aeX-vb-hIj"/>
                     <constraint firstItem="s3f-ZC-dys" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="bhH-rX-8aS"/>
                     <constraint firstItem="6Gn-ql-mk0" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="dzC-4b-p1v"/>
+                    <constraint firstItem="tTh-XE-thF" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" constant="-40" id="zHN-vi-SVY"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -54,8 +65,9 @@
                 <outlet property="dayLabel" destination="6Gn-ql-mk0" id="XmK-GM-uYN"/>
                 <outlet property="maxTempLabel" destination="4QZ-Ho-ihg" id="UPb-6N-40F"/>
                 <outlet property="minTempLabel" destination="RlK-N2-pq2" id="4lu-Yp-S8g"/>
+                <outlet property="weatherIcon" destination="tTh-XE-thF" id="5js-Vk-A6U"/>
             </connections>
-            <point key="canvasLocation" x="139" y="114"/>
+            <point key="canvasLocation" x="137.68115942028987" y="113.83928571428571"/>
         </tableViewCell>
     </objects>
 </document>

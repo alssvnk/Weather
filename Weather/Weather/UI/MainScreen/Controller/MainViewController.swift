@@ -1,101 +1,126 @@
-//
-//  ViewController.swift
-//  Weather
-//
-//  Created by Alisiya on 7.05.22.
-//
 
 import UIKit
 import CoreLocation
 
 class MainViewController: UIViewController, AlertPresentable {
     
-    @IBOutlet weak var mainImageView: UIImageView!
-    @IBOutlet weak var weatherAtMomentView: CurrentWeatherView!
-    @IBOutlet weak private var weatherColletionView: UICollectionView!
-    @IBOutlet weak private var weatherTableView: UITableView!
-
-    private var viewModel: WeatherViewModel? {
+    @IBOutlet weak private var mainImageView: UIImageView!
+    @IBOutlet weak private var weatherAtMomentView: CurrentWeatherView!
+    @IBOutlet weak private var blurView: UIView! {
         didSet {
-            DispatchQueue.main.async { self.updateView() }
+            self.blurView.blur()
         }
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.viewModel = WeatherViewModel()
-        
-        self.registerCells()
-        self.requestLocation()
-        self.requestWeather()
+    @IBOutlet weak private var weatherColletionView: UICollectionView! {
+        didSet {
+            self.weatherColletionView.register(WeatherByHourCell.nib, forCellWithReuseIdentifier: WeatherByHourCell.identifier)
+        }
+    }
+    @IBOutlet weak private var weatherTableView: UITableView! {
+        didSet {
+            self.weatherTableView.register(WeatherByDayCell.nib, forCellReuseIdentifier: WeatherByDayCell.identifier)
+        }
     }
     
+    // MARK: - Services
+    private lazy var locationManager: LocationManager = {
+        let manager = LocationManager()
+        manager.locationChangedAction = { [weak self] location in
+            self?.viewModel?.currentLocation = location
+        }
+        manager.askPermissionAction = { [weak self] in
+            guard let self = self else { return }
+            self.showGoSettingsAlert(
+                controller: self,
+                title: "Error",
+                message: "Please change location privacy at settings",
+                completion: nil
+            )
+        }
+        return manager
+    }()
+    
+    private let weatherNetworkService = WeatherNetworkService()
+
+    // MARK: - ViewModels
+    var viewModel: WeatherViewModel?
+
+    // MARK: - Life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    
+        self.setupViewModel()
+    }
+    
+    // MARK: - Setup
+    private func setupViewModel() {
+        self.viewModel = WeatherViewModel(
+            locationManager: self.locationManager,
+            networkService: self.weatherNetworkService
+        )
+        self.viewModel?.reloadTableAction = { [weak self] in
+            self?.updateView()
+        }
+        
+        self.viewModel?.updateLocation = { [weak self] in
+            self?.requestWeather()
+        }
+    }
+    
+    // MARK: - Methods
     private func updateView() {
         self.weatherTableView.reloadData()
         self.weatherColletionView.reloadData()
-        guard let data = viewModel?.currentData else { return }
+        
+        guard let data = self.viewModel?.currentData else { return }
         self.weatherAtMomentView.setupView(model: data)
         self.mainImageView.image = data.state.backgroundImage
     }
     
-    private func registerCells() {
-        self.weatherTableView.register(UINib(nibName: "WeatherByDayCell", bundle: nil), forCellReuseIdentifier: "WeatherByDayCell")
-        self.weatherColletionView.register(UINib(nibName: "WeatherByHourCell", bundle: nil), forCellWithReuseIdentifier: "WeatherByHourCell")
-    }
-    
-    private func requestLocation() {
-        viewModel?.requestLocation(completion: { [weak self] error in
-            guard let _ = error,
-                  let self = self else { return }
-            self.showSystemAlert(controller: self, title: "Error", message: "Something went wrong", completion: nil)
-        })
-    }
-    
     private func requestWeather() {
-        viewModel?.requestWeather(completion: { [weak self] error in
+        self.viewModel?.requestWeather(completion: { [weak self] error in
             guard let _ = error,
                   let self = self else { return }
             self.showSystemAlert(controller: self, title: "Error", message: "Something went wrong", completion: nil)
         })
     }
-    
 }
 
+// MARK: - UITableViewDataSource
 extension MainViewController: UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel?.tableDataSource.count ?? 0
+        self.viewModel?.tableDataSource.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherByDayCell") as? WeatherByDayCell,
-              let weatherObject = viewModel?.tableDataSource[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: WeatherByDayCell.identifier) as? WeatherByDayCell,
+              let weatherObject = self.viewModel?.tableDataSource[indexPath.row]
         else { return UITableViewCell() }
         
         let model = WeatherByDay(weatherObject: weatherObject)
         cell.configure(model: model)
+        cell.selectionStyle = .none
         return cell
-        
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension MainViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel?.collectionDataSource.count ?? 0
+        self.viewModel?.collectionDataSource.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherByHourCell", for: indexPath) as? WeatherByHourCell,
-              let weatherObject = viewModel?.collectionDataSource[indexPath.row]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherByHourCell.identifier, for: indexPath) as? WeatherByHourCell,
+              let weatherObject = self.viewModel?.collectionDataSource[indexPath.row]
         else { return UICollectionViewCell()}
         
         let model = WeatherByHour(weatherObject: weatherObject)

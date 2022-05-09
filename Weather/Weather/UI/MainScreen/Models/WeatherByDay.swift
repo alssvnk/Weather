@@ -1,12 +1,3 @@
-//
-//  WeatherByDay.swift
-//  Weather
-//
-//  Created by Alisiya on 7.05.22.
-//
-
-import Foundation
-
 struct WeatherByDay {
     
     let timestamp: String
@@ -15,10 +6,12 @@ struct WeatherByDay {
     let minTemp: String
     
     init(weatherObject: WeatherDayResponse) {
-        
-        self.state = checkForState(with: weatherObject.state)
+        self.state = Utilities.checkForState(with: weatherObject.state)
 
-        self.timestamp =  (weatherObject .timestamp .timestampToDate() as Date).dayOfWeek()!
+        self.timestamp = (weatherObject
+            .timestamp
+            .timestampToDate() as Date)
+        .dayOfWeek() ?? String.empty
         
         
         self.maxTemp = String(

@@ -1,12 +1,3 @@
-//
-//  WeatherResponse.swift
-//  Weather
-//
-//  Created by Alisiya on 7.05.22.
-//
-
-import Foundation
-
 struct WeatherDayResponse: Codable {
    
     let timestamp: Double
