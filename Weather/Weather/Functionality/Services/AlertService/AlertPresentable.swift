@@ -26,7 +26,7 @@ extension AlertPresentable {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil))
         DispatchQueue.main.async { [weak controller] in
-            controller.present(alert, animated: true, completion: completion)
+            controller?.present(alert, animated: true, completion: completion)
         }
     }
 }
